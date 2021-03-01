@@ -41,11 +41,15 @@ public class Main {
             Elements rows = table.select("tr");
 
 
-            for (int i = 1; i < rows.size(); i++) { //first row is the col names so skip it.
+            for (int i = 0; i < rows.size(); i++) {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
 
-                System.out.println(cols.get(0));
+                for (int j = 0; j < cols.size(); j++) {
+                    System.out.println(cols.get(j));
+                }
+
+
 
             }
 
