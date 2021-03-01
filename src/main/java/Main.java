@@ -18,6 +18,7 @@ public class Main {
         System.out.println(Arrays.asList(map));
     }
 
+    //TODO - rework this function, docblock, change name, variable names
     public static String binaryFileToHexString(final String path)
             throws FileNotFoundException, IOException
     {
@@ -43,8 +44,10 @@ public class Main {
         return sb.toString();
     }
 
+    //TODO - better function name, create helper functions and docblocks
     private static Map<String, String> constructHashMap() {
 
+        //TODO - better variable names
         Map map = new HashMap<String, String>();
 
 
@@ -56,6 +59,7 @@ public class Main {
             Element table = doc.select("table").get(0); //select the first table.
             Elements rows = table.select("tr");
 
+            //TODO - refactor both of these loops to be a foreach (look up the Java syntax for it)
             for (int i = 0; i < rows.size(); i++) {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
@@ -71,7 +75,7 @@ public class Main {
                 }
 
             }
-
+            //TODO - do some better exception handling here
         } catch (Exception e) {
 
         }
