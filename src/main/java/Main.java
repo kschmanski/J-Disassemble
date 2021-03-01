@@ -1,8 +1,5 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.io.*;
+
 import org.jsoup.Jsoup;
 
 import org.jsoup.nodes.Document;
@@ -18,10 +15,9 @@ public class Main {
 
         Map<String, String> map = constructHashMap();
 
-        System.out.println(Arrays.asList(map)); // method 1
-
+        System.out.println(Arrays.asList(map));
     }
-    
+
     public static String binaryFileToHexString(final String path)
             throws FileNotFoundException, IOException
     {
@@ -53,19 +49,18 @@ public class Main {
 
 
         try {
-            Document doc = Jsoup.connect("http://sparksandflames.com/files/x86InstructionChart.html").get();
+            ClassLoader classLoader = Main.class.getClassLoader();
+            File input = new File(classLoader.getResource("opcodes.html").getFile());
+            Document doc = Jsoup.parse(input, "UTF-8", "http://sparksandflames.com");
 
             Element table = doc.select("table").get(0); //select the first table.
             Elements rows = table.select("tr");
-
 
             for (int i = 0; i < rows.size(); i++) {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
 
                 for (int j = 0; j < cols.size(); j++) {
-                    //System.out.println(cols.get(j));
-
                     Elements opCode = cols.get(j).select("i");
                     Elements opCodeName = cols.get(j).select("b");
 
