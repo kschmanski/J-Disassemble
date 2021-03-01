@@ -1,3 +1,4 @@
+package com.mycompany;
 import java.io.*;
 
 import org.jsoup.Jsoup;
@@ -9,28 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 
-public class Main {
-
-    // to run:
-    // compile in here first
-    // mvn compile
-    // mvn exec:java -Dexec.mainClass=Main
+public class App {
 
     public static void main(String[] args) {
 
         Map<String, String> map = constructHashMap();
 
         System.out.println(Arrays.asList(map));
-
-        try {
-            String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
-            //System.out.println(x);
-
-        } catch (Exception e){
-
-            System.out.println(e);
-
-        }
     }
 
     //TODO - rework this function, docblock, change name, variable names
@@ -67,7 +53,7 @@ public class Main {
 
 
         try {
-            ClassLoader classLoader = Main.class.getClassLoader();
+            ClassLoader classLoader = App.class.getClassLoader();
             File input = new File(classLoader.getResource("opcodes.html").getFile());
             Document doc = Jsoup.parse(input, "UTF-8", "http://sparksandflames.com");
 
