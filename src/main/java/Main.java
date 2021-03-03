@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
@@ -18,17 +19,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Map<String, String> map = constructHashMap();
+        Map<String, String[]> map = constructHashMap();
 
-        System.out.println(Arrays.asList(map));
+        //System.out.println(Arrays.asList(map));
 
         try {
             String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
             //System.out.println(x);
 
         } catch (Exception e){
-
-            System.out.println(e);
 
         }
     }
@@ -60,7 +59,7 @@ public class Main {
     }
 
     //TODO - better function name, create helper functions and docblocks
-    private static Map<String, String> constructHashMap() {
+    private static Map<String, String[]> constructHashMap() {
 
         //TODO - better variable names
         Map map = new HashMap<String, String>();
@@ -85,8 +84,22 @@ public class Main {
 
                     String opCodetext = opCode.text();
                     String opCodeNameText = opCodeName.text();
+                    String opCodeArgs = cols.get(j).ownText();
 
-                    map.put(opCodetext, opCodeNameText);
+                    //System.out.println("opCode: " + opCodetext);
+                    //System.out.println("opCodeNameText: " + opCodeNameText);
+                    //System.out.println("args: " + opCodeArgs + "\n");
+
+                    String stringArray[] = new String[2];
+                    stringArray[0] = opCodeNameText;
+                    stringArray[1] = opCodeArgs;
+
+                    map.put(opCodetext, stringArray);
+                    System.out.println(opCodetext);
+                    System.out.println(Arrays.toString((String[])map.get(opCodetext)));
+                    System.out.println(getNumberOfArgumentsInOpcode(opCodeArgs));
+                    System.out.println("number of bytes is " + getNumberOfBytesForOpcode(opCodetext));
+                    System.out.println("\n\n");
                 }
 
             }
@@ -96,6 +109,30 @@ public class Main {
         }
 
         return map;
+
+    }
+
+    private static int getNumberOfArgumentsInOpcode(String opCodeArgs) {
+
+        String args = opCodeArgs.trim();
+        System.out.println("args is " + args);
+
+        if (args.length() > 0) {
+            String[] parts = args.split(" ");
+
+            return parts.length;
+        }
+
+        return 0;
+
+    }
+
+    private static int getNumberOfBytesForOpcode(String opCode) {
+
+        if (opCode.charAt(0) == '0') {
+            return 1;
+        }
+        return 2;
 
     }
 
