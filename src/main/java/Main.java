@@ -26,10 +26,21 @@ public class Main {
         try {
             String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
             //System.out.println(x);
+            doDisassembly(x, map);
 
         } catch (Exception e){
 
         }
+    }
+
+    private static void doDisassembly(String binaryCode, Map<String, String[]> map) {
+        //System.out.println(binaryCode);
+
+        for (int i = 0; i < binaryCode.length(); i+=2) {
+            String opcodeFromBinaryFile = binaryCode.substring(i, i+2);
+            System.out.println("The opcode for 0x" + opcodeFromBinaryFile + " = " + Arrays.toString((String[])map.get(opcodeFromBinaryFile)));
+        }
+
     }
 
     //TODO - rework this function, docblock, change name, variable names
