@@ -23,6 +23,7 @@ public class Main {
         Map<String, String[]> map = constructHashMapCoder32();
 
         //System.out.println(Arrays.asList(map));
+        printHashMap(map);
 
         try {
             String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
@@ -192,14 +193,30 @@ public class Main {
             for (int i = 0; i < rows.size(); i++) {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
-                System.out.println(row.text());
-                System.out.println("and value for opcode is " + rows.get(i).child(2));
-                System.out.println("and name for opcode is " + rows.get(i).child(10));
+                //System.out.println(row.text());
+                String opcode = rows.get(i).child(2).text();
+                String opcodeMnemonic = rows.get(i).child(10).text();
+                String arg1 = rows.get(i).child(11).text();
+                String arg2 = rows.get(i).child(12).text();
+                //System.out.println("and value for opcode is " + opcode);
+                //System.out.println("and name for opcode is " + opcodeMnemonic);
+                //System.out.println("and name for arg1 is " + arg1);
+                //System.out.println("and name for arg2 is " + arg2);
+
+                StringBuilder opcodeArgs = new StringBuilder();
+                opcodeArgs.append(arg1.trim());
+                opcodeArgs.append(",");
+                opcodeArgs.append(arg2.trim());
+
+                System.out.println("args is " + opcodeArgs.toString());
 
 
-                for (int j = 0; j < cols.size(); j++) {
-                    System.out.println("the name of the column is " + headers.get(j).attr("title"));
-                }
+                String stringArray[] = new String[2];
+                stringArray[0] = opcodeMnemonic;
+                stringArray[1] = opcodeArgs.toString();
+
+                map.put(opcode, stringArray);
+
             }
             //TODO - do some better exception handling here
         } catch (Exception e) {
@@ -207,6 +224,17 @@ public class Main {
         }
 
         return map;
+
+    }
+
+    private static void printHashMap(Map<String, String[]> map) {
+
+        for (String key: map.keySet()) {
+            System.out.println(key + " : ");
+            for (String element : map.get(key)) {
+                System.out.println(element);
+            }
+        }
 
     }
 
