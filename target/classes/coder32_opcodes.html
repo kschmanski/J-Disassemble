@@ -1,0 +1,8305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>coder32 edition | X86 Opcode and Instruction Reference 1.12</title>
+<meta name="description" content="coder32 edition of X86 Opcode and Instruction Reference">
+<style type="text/css">
+        @media screen {
+        
+            body {background-color: #F0F0F0; font-family: "Courier New", "Courier", monospace; font-size: 75%;}
+          
+        
+        .ref_table table {margin: 1em 0 0 0;}
+        .ref_table tbody:hover {background-color: #D0D0D0;}
+        .print_only {display: none;}
+
+        
+
+        h1 {font-size: 100%;}
+        h2 {font-size: 100%;}
+        }
+
+        @media print {
+        
+        .notpublic {display: none;}
+        }
+
+        table {border-collapse: collapse; }
+        caption {font-size: medium; font-weight: bold; text-align: left; line-height: 250%}
+        .caption {font-size: medium; font-weight: bold; text-align: left; line-height: 250%}
+        th {font-weight: normal;} /*  border: 1px solid black; this border is unusable because of FF3 bug */
+
+        
+            thead {border-style: solid; border-width: 2px; border-color: black; font-family: "Courier New", "Courier", monospace;}
+            tbody {border-style: solid; border-width: 1px; border-color: black; font-family: "Courier New", "Courier", monospace;}
+          
+
+        .center {text-align:center}
+        .highlight {background-color: #D0D0D0;}
+        .heading {font-family: Tahoma, lucida, sans-serif}
+        .section {margin-bottom: 10px; font-size: 25px}
+        .notes_page {padding-left: 6%; padding-right: 20%;} /*position: relative; height: 100%;padding-top: 2%; */
+        .modrm_sib_tables {margin-left:6%;font-size:120%}
+        .modrm_sib_tables p {font-weight:bold;font-size:140%}
+        .modrm_sib_tables table tbody tr:hover {background-color:#C0C0C0}
+        .modrm_sib_tables table caption {margin-bottom:0}
+
+        </style>
+</head>
+<body>
+<h1 style="float: left; width: 35%; margin-top: 0px;"><a href="http://ref.x86asm.net/index.html" title="ref.x86asm.net">X86 Opcode and Instruction Reference Home</a></h1>
+<div style="float: right; width: 55%; text-align: right;">
+        Other editions:
+        <a href="http://ref.x86asm.net/coder64.html">coder64</a>,
+        <a href="http://ref.x86asm.net/coder.html">coder</a>,
+        <a href="http://ref.x86asm.net/geek32.html">geek32</a>,
+        <a href="http://ref.x86asm.net/geek64.html">geek64</a>, <a href="http://ref.x86asm.net/geek.html">geek</a>
+</div>
+
+<div class="heading section breakbefore notpublic"></div>
+<table cellpadding="2" rules="groups" class="ref_table notpublic">
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup><col class="highlight"></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<colgroup></colgroup>
+<thead><tr>
+<th title="Prefix"><A HREF="http://ref.x86asm.net/#column_pf">pf</A></th>
+<th title="Prefix 0F"><A HREF="http://ref.x86asm.net/#column_0F">0F</A></th>
+<th title="Primary Opcode"><A HREF="http://ref.x86asm.net/#column_po">po</A></th>
+<th title="Secondary Opcode"><A HREF="http://ref.x86asm.net/#column_so">so</A></th>
+<th TITLE="Register/Opcode Field"><A HREF="http://ref.x86asm.net/#column_o">o</A></th>
+<th TITLE="Introduced with the Processor"><A HREF="http://ref.x86asm.net/#column_proc">proc</A></th>
+<th TITLE="Documentation Status"><A HREF="http://ref.x86asm.net/#column_st">st</A></th>
+<th TITLE="Mode of Operation"><A HREF="http://ref.x86asm.net/#column_m">m</A></th>
+<th TITLE="Ring Level"><A HREF="http://ref.x86asm.net/#column_rl">rl</A></th>
+<th TITLE="Lock Prefix/FPU Push/FPU Pop"><A HREF="http://ref.x86asm.net/#column_x">x</A></th>
+<th title="Instruction Mnemonic"><A HREF="http://ref.x86asm.net/#column_mnemonic">mnemonic</A></th>
+<th title="Operand 1"><A HREF="http://ref.x86asm.net/#column_op">op1</A></th>
+<th title="Operand 2"><A HREF="http://ref.x86asm.net/#column_op">op2</A></th>
+<th title="Operand 3"><A HREF="http://ref.x86asm.net/#column_op">op3</A></th>
+<th title="Operand 4"><A HREF="http://ref.x86asm.net/#column_op">op4</A></th>
+<th title="Instruction Extension Group"><A HREF="http://ref.x86asm.net/#column_iext">iext</A></th>
+<th TITLE="Tested Flags"><A HREF="http://ref.x86asm.net/#column_tested_f_modif_f_def_f_undef_f">tested f</A></th>
+<th TITLE="Modified Flags"><A HREF="http://ref.x86asm.net/#column_tested_f_modif_f_def_f_undef_f">modif f</A></th>
+<th TITLE="Defined Flags"><A HREF="http://ref.x86asm.net/#column_tested_f_modif_f_def_f_undef_f">def f</A></th>
+<th TITLE="Undefined Flags"><A HREF="http://ref.x86asm.net/#column_tested_f_modif_f_def_f_undef_f">undef f</A></th>
+<th TITLE="Flags Values"><A HREF="http://ref.x86asm.net/#column_f_values">f values</A></th>
+<th TITLE="Description, Notes">
+<A HREF="http://ref.x86asm.net/#column_description_notes">description, notes</A>                                        
+</th>
+</tr></thead>
+<TBODY id="x00"><TR>
+<TD></TD>
+<TD></TD>
+<TD>00</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADD</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY id="x01"><TR>
+<TD></TD>
+<TD></TD>
+<TD>01</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADD</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY id="x02"><TR>
+<TD></TD>
+<TD></TD>
+<TD>02</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADD</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY id="x03"><TR>
+<TD></TD>
+<TD></TD>
+<TD>03</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADD</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY id="x04"><TR>
+<TD></TD>
+<TD></TD>
+<TD>04</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADD</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY id="x05"><TR>
+<TD></TD>
+<TD></TD>
+<TD>05</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADD</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY id="x06"><TR>
+<TD></TD>
+<TD></TD>
+<TD>06</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>ES</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x07"><TR>
+<TD></TD>
+<TD></TD>
+<TD>07</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POP</TD>
+<td><b>ES</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop a Value from the Stack</td>
+</TR></TBODY>
+<TBODY id="x08"><TR>
+<TD></TD>
+<TD></TD>
+<TD>08</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>OR</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY id="x09"><TR>
+<TD></TD>
+<TD></TD>
+<TD>09</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>OR</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY id="x0A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>0A</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>OR</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY id="x0B"><TR>
+<TD></TD>
+<TD></TD>
+<TD>0B</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>OR</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY id="x0C"><TR>
+<TD></TD>
+<TD></TD>
+<TD>0C</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>OR</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY id="x0D"><TR>
+<TD></TD>
+<TD></TD>
+<TD>0D</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>OR</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY id="x0E"><TR>
+<TD></TD>
+<TD></TD>
+<TD>0E</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>CS</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x10"><TR>
+<TD></TD>
+<TD></TD>
+<TD>10</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADC</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY id="x11"><TR>
+<TD></TD>
+<TD></TD>
+<TD>11</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADC</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY id="x12"><TR>
+<TD></TD>
+<TD></TD>
+<TD>12</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADC</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY id="x13"><TR>
+<TD></TD>
+<TD></TD>
+<TD>13</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADC</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY id="x14"><TR>
+<TD></TD>
+<TD></TD>
+<TD>14</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADC</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY id="x15"><TR>
+<TD></TD>
+<TD></TD>
+<TD>15</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ADC</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY id="x16"><TR>
+<TD></TD>
+<TD></TD>
+<TD>16</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>SS</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x17"><TR>
+<TD></TD>
+<TD></TD>
+<TD>17</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POP</TD>
+<td><b>SS</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop a Value from the Stack</td>
+</TR></TBODY>
+<TBODY id="x18"><TR>
+<TD></TD>
+<TD></TD>
+<TD>18</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SBB</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY id="x19"><TR>
+<TD></TD>
+<TD></TD>
+<TD>19</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SBB</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY id="x1A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>1A</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SBB</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY id="x1B"><TR>
+<TD></TD>
+<TD></TD>
+<TD>1B</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SBB</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY id="x1C"><TR>
+<TD></TD>
+<TD></TD>
+<TD>1C</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SBB</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY id="x1D"><TR>
+<TD></TD>
+<TD></TD>
+<TD>1D</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SBB</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY id="x1E"><TR>
+<TD></TD>
+<TD></TD>
+<TD>1E</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>DS</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x1F"><TR>
+<TD></TD>
+<TD></TD>
+<TD>1F</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POP</TD>
+<td><b>DS</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop a Value from the Stack</td>
+</TR></TBODY>
+<TBODY id="x20"><TR>
+<TD></TD>
+<TD></TD>
+<TD>20</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>AND</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY id="x21"><TR>
+<TD></TD>
+<TD></TD>
+<TD>21</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>AND</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY id="x22"><TR>
+<TD></TD>
+<TD></TD>
+<TD>22</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AND</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY id="x23"><TR>
+<TD></TD>
+<TD></TD>
+<TD>23</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AND</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY id="x24"><TR>
+<TD></TD>
+<TD></TD>
+<TD>24</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AND</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY id="x25"><TR>
+<TD></TD>
+<TD></TD>
+<TD>25</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AND</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY id="x26"><TR>
+<TD CLASS="highlight">26</TD>
+<TD></TD>
+<TD></TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ES</TD>
+<td><i>ES</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>ES segment override prefix</td>
+</TR></TBODY>
+<TBODY id="x27"><TR>
+<TD></TD>
+<TD></TD>
+<TD>27</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>DAA</TD>
+<td><b><i>AL</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.....a.c</TD>
+<TD>o..szapc</TD>
+<TD>...szapc</TD>
+<TD>o.......</TD>
+<TD></TD>
+<td>Decimal Adjust AL after Addition</td>
+</TR></TBODY>
+<TBODY id="x28"><TR>
+<TD></TD>
+<TD></TD>
+<TD>28</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SUB</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY id="x29"><TR>
+<TD></TD>
+<TD></TD>
+<TD>29</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SUB</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY id="x2A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>2A</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SUB</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY id="x2B"><TR>
+<TD></TD>
+<TD></TD>
+<TD>2B</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SUB</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY id="x2C"><TR>
+<TD></TD>
+<TD></TD>
+<TD>2C</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SUB</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY id="x2D"><TR>
+<TD></TD>
+<TD></TD>
+<TD>2D</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SUB</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY id="x2E"><TR>
+<TD CLASS="highlight">2E</TD>
+<TD></TD>
+<TD></TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CS</TD>
+<td><i>CS</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>CS segment override prefix</td>
+</TR></TBODY>
+<TBODY id="x2F"><TR>
+<TD></TD>
+<TD></TD>
+<TD>2F</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>DAS</TD>
+<td><b><i>AL</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.....a.c</TD>
+<TD>o..szapc</TD>
+<TD>...szapc</TD>
+<TD>o.......</TD>
+<TD></TD>
+<td>Decimal Adjust AL after Subtraction</td>
+</TR></TBODY>
+<TBODY id="x30"><TR>
+<TD></TD>
+<TD></TD>
+<TD>30</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XOR</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY id="x31"><TR>
+<TD></TD>
+<TD></TD>
+<TD>31</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XOR</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY id="x32"><TR>
+<TD></TD>
+<TD></TD>
+<TD>32</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>XOR</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY id="x33"><TR>
+<TD></TD>
+<TD></TD>
+<TD>33</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>XOR</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY id="x34"><TR>
+<TD></TD>
+<TD></TD>
+<TD>34</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>XOR</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY id="x35"><TR>
+<TD></TD>
+<TD></TD>
+<TD>35</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>XOR</TD>
+<td><b>eAX</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY id="x36"><TR>
+<TD CLASS="highlight">36</TD>
+<TD></TD>
+<TD></TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SS</TD>
+<td><i>SS</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>SS segment override prefix</td>
+</TR></TBODY>
+<TBODY id="x37"><TR>
+<TD></TD>
+<TD></TD>
+<TD>37</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AAA</TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.....a..</TD>
+<TD>o..szapc</TD>
+<TD>.....a.c</TD>
+<TD>o..sz.p.</TD>
+<TD></TD>
+<td>ASCII Adjust After Addition</td>
+</TR></TBODY>
+<TBODY id="x38"><TR>
+<TD></TD>
+<TD></TD>
+<TD>38</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r/m8</td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x39"><TR>
+<TD></TD>
+<TD></TD>
+<TD>39</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r/m16/32</td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x3A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>3A</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r8</td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x3B"><TR>
+<TD></TD>
+<TD></TD>
+<TD>3B</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r16/32</td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x3C"><TR>
+<TD></TD>
+<TD></TD>
+<TD>3C</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>AL</td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x3D"><TR>
+<TD></TD>
+<TD></TD>
+<TD>3D</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>eAX</td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x3E"><TR>
+<TD CLASS="highlight">3E</TD>
+<TD></TD>
+<TD></TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>DS</TD>
+<td><i>DS</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>DS segment override prefix</td>
+</TR></TBODY>
+<TBODY id="x60"><TR>
+<TD></TD>
+<TD></TD>
+<TD>60</TD>
+<td></td>
+<TD></TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSHA</TD>
+<td><i>AX</i></td>
+<td><i>CX</i></td>
+<td><i>DX</i></td>
+<td><span title="src: AX src: CX src: DX src: BX src: SP src: BP src: SI src: DI ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push All General-Purpose Registers</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>60</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSHAD</TD>
+<td><i>EAX</i></td>
+<td><i>ECX</i></td>
+<td><i>EDX</i></td>
+<td><span title="src: EAX src: ECX src: EDX src: EBX src: ESP src: EBP src: ESI src: EDI ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push All General-Purpose Registers</td>
+</TR></TBODY>
+<TBODY id="x61"><TR>
+<TD></TD>
+<TD></TD>
+<TD>61</TD>
+<td></td>
+<TD></TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POPA</TD>
+<td><b><i>DI</i></b></td>
+<td><b><i>SI</i></b></td>
+<td><b><i>BP</i></b></td>
+<td><span title="dst: DI dst: SI dst: BP dst: BX dst: DX dst: CX dst: AX ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop All General-Purpose Registers</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>61</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POPAD</TD>
+<td><b><i>EDI</i></b></td>
+<td><b><i>ESI</i></b></td>
+<td><b><i>EBP</i></b></td>
+<td><span title="dst: EDI dst: ESI dst: EBP dst: EBX dst: EDX dst: ECX dst: EAX ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop All General-Purpose Registers</td>
+</TR></TBODY>
+<TBODY id="x62"><TR>
+<TD></TD>
+<TD></TD>
+<TD>62</TD>
+<td></td>
+<TD>r</TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>BOUND</TD>
+<td>r16/32</td>
+<td>m16/32&amp;16/32</td>
+<td><i>eFlags</i></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>..i.....</TD>
+<TD>..i.....</TD>
+<TD></TD>
+<TD>..i.....</TD>
+<td>Check Array Index Against Bounds</td>
+</TR></TBODY>
+<TBODY id="x63"><TR>
+<TD></TD>
+<TD></TD>
+<TD>63</TD>
+<td></td>
+<TD>r</TD>
+<TD>02+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ARPL</TD>
+<td>r/m16</td>
+<td>r16</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>....z...</TD>
+<TD>....z...</TD>
+<TD></TD>
+<TD></TD>
+<td>Adjust RPL Field of Segment Selector</td>
+</TR></TBODY>
+<TBODY id="x68"><TR>
+<TD></TD>
+<TD></TD>
+<TD>68</TD>
+<td></td>
+<TD></TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x69"><TR>
+<TD></TD>
+<TD></TD>
+<TD>69</TD>
+<td></td>
+<TD>r</TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>IMUL</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td>imm16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o......c</TD>
+<TD>...szap.</TD>
+<TD></TD>
+<td>Signed Multiply</td>
+</TR></TBODY>
+<TBODY id="x6A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>6A</TD>
+<td></td>
+<TD></TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x6B"><TR>
+<TD></TD>
+<TD></TD>
+<TD>6B</TD>
+<td></td>
+<TD>r</TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>IMUL</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td>imm8</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o......c</TD>
+<TD>...szap.</TD>
+<TD></TD>
+<td>Signed Multiply</td>
+<TBODY id="x80"><TR id="x80_0">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADD</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR id="x80_1">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>OR</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x80_2">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADC</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY><TR id="x80_3">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SBB</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY><TR id="x80_4">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>AND</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY><TR id="x80_5">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SUB</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="x80_6">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XOR</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x80_7">
+<TD></TD>
+<TD></TD>
+<TD>80</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r/m8</td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x81"><TR id="x81_0">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADD</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR id="x81_1">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>OR</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x81_2">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADC</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY><TR id="x81_3">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SBB</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY><TR id="x81_4">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>AND</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY><TR id="x81_5">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SUB</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="x81_6">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XOR</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x81_7">
+<TD></TD>
+<TD></TD>
+<TD>81</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r/m16/32</td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x82"><TR id="x82_0">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADD</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR id="x82_1">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>OR</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x82_2">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADC</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY><TR id="x82_3">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SBB</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY><TR id="x82_4">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>AND</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY><TR id="x82_5">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SUB</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="x82_6">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XOR</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x82_7">
+<TD></TD>
+<TD></TD>
+<TD>82</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r/m8</td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x83"><TR id="x83_0">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADD</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR id="x83_1">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>OR</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Inclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x83_2">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>ADC</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Add with Carry</td>
+</TR></TBODY>
+<TBODY><TR id="x83_3">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SBB</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Integer Subtraction with Borrow</td>
+</TR></TBODY>
+<TBODY><TR id="x83_4">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>AND</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical AND</td>
+</TR></TBODY>
+<TBODY><TR id="x83_5">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>SUB</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="x83_6">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XOR</TD>
+<td><b>r/m16/32</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Exclusive OR</td>
+</TR></TBODY>
+<TBODY><TR id="x83_7">
+<TD></TD>
+<TD></TD>
+<TD>83</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMP</TD>
+<td>r/m16/32</td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Two Operands</td>
+</TR></TBODY>
+<TBODY id="x84"><TR>
+<TD></TD>
+<TD></TD>
+<TD>84</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>TEST</TD>
+<td>r/m8</td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Compare</td>
+</TR></TBODY>
+<TBODY id="x85"><TR>
+<TD></TD>
+<TD></TD>
+<TD>85</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>TEST</TD>
+<td>r/m16/32</td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Compare</td>
+</TR></TBODY>
+<TBODY id="x86"><TR>
+<TD></TD>
+<TD></TD>
+<TD>86</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XCHG</TD>
+<td><b>r8</b></td>
+<td><b>r/m8</b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Exchange Register/Memory with Register</td>
+</TR></TBODY>
+<TBODY id="x87"><TR>
+<TD></TD>
+<TD></TD>
+<TD>87</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>XCHG</TD>
+<td><b>r16/32</b></td>
+<td><b>r/m16/32</b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Exchange Register/Memory with Register</td>
+</TR></TBODY>
+<TBODY id="x88"><TR>
+<TD></TD>
+<TD></TD>
+<TD>88</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>r/m8</b></td>
+<td>r8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="x89"><TR>
+<TD></TD>
+<TD></TD>
+<TD>89</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>r/m16/32</b></td>
+<td>r16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="x8A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>8A</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>r8</b></td>
+<td>r/m8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="x8B"><TR>
+<TD></TD>
+<TD></TD>
+<TD>8B</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>r16/32</b></td>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="x8D"><TR>
+<TD></TD>
+<TD></TD>
+<TD>8D</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>LEA</TD>
+<td><b>r16/32</b></td>
+<td>m</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Load Effective Address</td>
+</TR></TBODY>
+<TBODY id="x8E"><TR>
+<TD></TD>
+<TD></TD>
+<TD>8E</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>Sreg</b></td>
+<td>r/m16</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="x8F"><TR id="x8F_0">
+<TD></TD>
+<TD></TD>
+<TD>8F</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POP</TD>
+<td><b>r/m16/32</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop a Value from the Stack</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>90</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD>D<A HREF="#gen_note_90_NOP"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>NOP</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>No Operation</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>F3</TD>
+<TD></TD>
+<TD>90</TD>
+<td></td>
+<TD></TD>
+<TD>P4+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PAUSE</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1">sse2</td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Spin Loop Hint</td>
+</TR></TBODY>
+<TBODY id="x98"><TR>
+<TD></TD>
+<TD></TD>
+<TD>98</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CBW</TD>
+<td><b><i>AX</i></b></td>
+<td><i>AL</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Convert Byte to Word</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>98</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CWDE</TD>
+<td><b><i>EAX</i></b></td>
+<td><i>AX</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Convert Word to Doubleword</td>
+</TR></TBODY>
+<TBODY id="x99"><TR>
+<TD></TD>
+<TD></TD>
+<TD>99</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CWD</TD>
+<td><b><i>DX</i></b></td>
+<td><i>AX</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Convert Word to Doubleword</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>99</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CDQ</TD>
+<td><b><i>EDX</i></b></td>
+<td><i>EAX</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Convert Doubleword to Quadword</td>
+</TR></TBODY>
+<TBODY id="x9A"><TR>
+<TD></TD>
+<TD></TD>
+<TD>9A</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CALLF</TD>
+<td>ptr16:16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Call Procedure</td>
+</TR></TBODY>
+<TBODY id="x9C"><TR>
+<TD></TD>
+<TD></TD>
+<TD>9C</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSHF</TD>
+<td><i>Flags</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push FLAGS Register onto the Stack</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>9C</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSHFD</TD>
+<td><i>EFlags</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push eFLAGS Register onto the Stack</td>
+</TR></TBODY>
+<TBODY id="x9D"><TR>
+<TD></TD>
+<TD></TD>
+<TD>9D</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POPF</TD>
+<td><b><i>Flags</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop Stack into FLAGS Register</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>9D</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>POPFD</TD>
+<td><b><i>EFlags</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Pop Stack into eFLAGS Register</td>
+</TR></TBODY>
+<TBODY id="x9E"><TR>
+<TD></TD>
+<TD></TD>
+<TD>9E</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>SAHF</TD>
+<td><i>AH</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>...szapc</TD>
+<TD>...szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Store AH into Flags</td>
+</TR></TBODY>
+<TBODY id="x9F"><TR>
+<TD></TD>
+<TD></TD>
+<TD>9F</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>LAHF</TD>
+<td><b><i>AH</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>...szapc</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Load Status Flags into AH Register</td>
+</TR></TBODY>
+<TBODY id="xA0"><TR>
+<TD></TD>
+<TD></TD>
+<TD>A0</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>AL</b></td>
+<td>moffs8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="xA1"><TR>
+<TD></TD>
+<TD></TD>
+<TD>A1</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>eAX</b></td>
+<td>moffs16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="xA2"><TR>
+<TD></TD>
+<TD></TD>
+<TD>A2</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>moffs8</b></td>
+<td>AL</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="xA3"><TR>
+<TD></TD>
+<TD></TD>
+<TD>A3</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>moffs16/32</b></td>
+<td>eAX</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="xC2"><TR>
+<TD></TD>
+<TD></TD>
+<TD>C2</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>RETN</TD>
+<td>imm16</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Return from procedure</td>
+</TR></TBODY>
+<TBODY id="xC3"><TR>
+<TD></TD>
+<TD></TD>
+<TD>C3</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>RETN</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Return from procedure</td>
+</TR></TBODY>
+<TBODY id="xC4"><TR>
+<TD></TD>
+<TD></TD>
+<TD>C4</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>LES</TD>
+<td><b><i>ES</i></b></td>
+<td><b>r16/32</b></td>
+<td>m16:16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Load Far Pointer</td>
+</TR></TBODY>
+<TBODY id="xC5"><TR>
+<TD></TD>
+<TD></TD>
+<TD>C5</TD>
+<td></td>
+<TD>r</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>LDS</TD>
+<td><b><i>DS</i></b></td>
+<td><b>r16/32</b></td>
+<td>m16:16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Load Far Pointer</td>
+</TR></TBODY>
+<TBODY id="xC6"><TR id="xC6_0">
+<TD></TD>
+<TD></TD>
+<TD>C6</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>r/m8</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="xC7"><TR id="xC7_0">
+<TD></TD>
+<TD></TD>
+<TD>C7</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MOV</TD>
+<td><b>r/m16/32</b></td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Move</td>
+</TR></TBODY>
+<TBODY id="xC8"><TR>
+<TD></TD>
+<TD></TD>
+<TD>C8</TD>
+<td></td>
+<TD></TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>ENTER</TD>
+<td><b><i>eBP</i></b></td>
+<td>imm16</td>
+<td>imm8</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Make Stack Frame for Procedure Parameters</td>
+</TR></TBODY>
+<TBODY id="xC9"><TR>
+<TD></TD>
+<TD></TD>
+<TD>C9</TD>
+<td></td>
+<TD></TD>
+<TD>01+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>LEAVE</TD>
+<td><b><i>eBP</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>High Level Procedure Exit</td>
+</TR></TBODY>
+<TBODY id="xCA"><TR>
+<TD></TD>
+<TD></TD>
+<TD>CA</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>RETF</TD>
+<td>imm16</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Return from procedure</td>
+</TR></TBODY>
+<TBODY id="xCB"><TR>
+<TD></TD>
+<TD></TD>
+<TD>CB</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>RETF</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Return from procedure</td>
+</TR></TBODY>
+<TBODY id="xCC"><TR>
+<TD></TD>
+<TD></TD>
+<TD>CC</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>INT</TD>
+<td>3</td>
+<td><i>eFlags</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>..i.....</TD>
+<TD>..i.....</TD>
+<TD></TD>
+<TD>..i.....</TD>
+<td>Call to Interrupt Procedure</td>
+</TR></TBODY>
+<TBODY id="xCD"><TR>
+<TD></TD>
+<TD></TD>
+<TD>CD</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>INT</TD>
+<td>imm8</td>
+<td><i>eFlags</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>..i.....</TD>
+<TD>..i.....</TD>
+<TD></TD>
+<TD>..i.....</TD>
+<td>Call to Interrupt Procedure</td>
+</TR></TBODY>
+<TBODY id="xCE"><TR>
+<TD></TD>
+<TD></TD>
+<TD>CE</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>INTO</TD>
+<td><i>eFlags</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>o.......</TD>
+<TD>..i.....</TD>
+<TD>..i.....</TD>
+<TD></TD>
+<TD>..i.....</TD>
+<td>Call to Interrupt Procedure</td>
+</TR></TBODY>
+<TBODY id="xCF"><TR>
+<TD></TD>
+<TD></TD>
+<TD>CF</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>IRET</TD>
+<td><b><i>Flags</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Interrupt Return</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>CF</TD>
+<td></td>
+<TD></TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD>f</TD>
+<TD></TD>
+<TD>IRETD</TD>
+<td><b><i>EFlags</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Interrupt Return</td>
+</TR></TBODY>
+<TBODY id="xD4"><TR>
+<TD></TD>
+<TD></TD>
+<TD>D4</TD>
+<td>0A</td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AAM</TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>...sz.p.</TD>
+<TD>o....a.c</TD>
+<TD></TD>
+<td>ASCII Adjust AX After Multiply</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D4</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD><i>AMX</i></TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td>imm8</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>...sz.p.</TD>
+<TD>o....a.c</TD>
+<TD></TD>
+<td>Adjust AX After Multiply</td>
+</TR></TBODY>
+<TBODY id="xD5"><TR>
+<TD></TD>
+<TD></TD>
+<TD>D5</TD>
+<td>0A</td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>AAD</TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>...sz.p.</TD>
+<TD>o....a.c</TD>
+<TD></TD>
+<td>ASCII Adjust AX Before Division</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D5</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD><i>ADX</i></TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td>imm8</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>...sz.p.</TD>
+<TD>o....a.c</TD>
+<TD></TD>
+<td>Adjust AX Before Division</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_1">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FXCH</TD>
+<td><b><i>ST</i></b></td>
+<td><b>STi</b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Exchange Register Contents</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>C9</td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FXCH</TD>
+<td><b><i>ST</i></b></td>
+<td><b><i>ST1</i></b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Exchange Register Contents</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_2">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FST</TD>
+<td><b>m32real</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>D0</td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNOP</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>No Operation</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_3">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSTP</TD>
+<td><b>m32real</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD><i>FSTP1</i></TD>
+<td><b>STi</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_4">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FLDENV</TD>
+<td>m14/28</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Load x87 FPU Environment</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>E0</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCHS</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Change Sign</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>E1</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FABS</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Absolute Value</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>E4</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FTST</TD>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Test</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>E5</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FXAM</TD>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Examine</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_5">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FLDCW</TD>
+<td>m16</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Load x87 FPU Control Word</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>E8</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLD1</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant +1.0</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>E9</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLDL2T</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant log<sub>2</sub>10</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>EA</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLDL2E</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant log<sub>2</sub>e</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>EB</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLDPI</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant &#960;</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>EC</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLDLG2</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant log<sub>10</sub>2</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>ED</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLDLN2</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant log<sub>e</sub>2</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>EE</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLDZ</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Constant +0.0</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_6">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNSTENV</TD>
+<td><b>m14/28</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Environment</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSTENV</TD>
+<td><b>m14/28</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Environment</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F0</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>F2XM1</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Compute 2<sup>x</sup>-1</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F1</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FYL2X</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Compute y × log<sub>2</sub>x and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F2</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FPTAN</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.12.</TD>
+<TD>0..3</TD>
+<TD></TD>
+<td>Partial Tangent</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F3</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FPATAN</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Partial Arctangent and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F4</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FXTRACT</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Extract Exponent and Significand</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F5</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FPREM1</TD>
+<td><b><i>ST</i></b></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>IEEE Partial Remainder</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F6</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FDECSTP</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD>.0..</TD>
+<td>Decrement Stack-Top Pointer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F7</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FINCSTP</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD>.0..</TD>
+<td>Increment Stack-Top Pointer</td>
+</TR></TBODY>
+<TBODY><TR id="xD9_7">
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNSTCW</TD>
+<td><b>m16</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Control Word</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>D9</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSTCW</TD>
+<td><b>m16</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Control Word</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F8</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FPREM</TD>
+<td><b><i>ST</i></b></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Partial Remainder (for compatibility with i8087 and i287)</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>F9</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FYL2XP1</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Compute y × log<sub>2</sub>(x+1) and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>FA</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSQRT</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Square Root</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>FB</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FSINCOS</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.12.</TD>
+<TD>0..3</TD>
+<TD></TD>
+<td>Sine and Cosine</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>FC</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FRNDINT</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Round to Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>FD</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSCALE</TD>
+<td><b><i>ST</i></b></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Scale</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>FE</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSIN</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.12.</TD>
+<TD>0..3</TD>
+<TD></TD>
+<td>Sine</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>D9</TD>
+<td>FF</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCOS</TD>
+<td><b><i>ST</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.12.</TD>
+<TD>0..3</TD>
+<TD></TD>
+<td>Cosine</td>
+</TR></TBODY>
+<TBODY id="xDA"><TR id="xDA_0">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIADD</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVB</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - below (CF=1)</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_1">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIMUL</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Multiply</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVE</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>....z...</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - equal (ZF=1)</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_2">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FICOM</TD>
+<td><i>ST</i></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVBE</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>....z...</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - below or equal (CF=1 or ZF=1)</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_3">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FICOMP</TD>
+<td><i>ST</i></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Integer and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVU</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>......p.</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - unordered (PF=1)</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_4">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FISUB</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_5">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FISUBR</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Subtract</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td>E9</td>
+<TD CLASS="highlight">5</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>P</TD>
+<TD>FUCOMPP</TD>
+<td><i>ST</i></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Unordered Compare Floating Point Values and Pop Twice</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_6">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIDIV</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Divide</td>
+</TR></TBODY>
+<TBODY><TR id="xDA_7">
+<TD></TD>
+<TD></TD>
+<TD>DA</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIDIVR</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Divide</td>
+</TR></TBODY>
+<TBODY id="xDB"><TR id="xDB_0">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FILD</TD>
+<td><b><i>ST</i></b></td>
+<td>m32int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVNB</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - not below (CF=0)</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_1">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>P4++</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FISTTP</TD>
+<td><b>m32int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1">sse3</td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD>.0..</TD>
+<td>Store Integer with Truncation and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVNE</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>....z...</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - not equal (ZF=0)</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_2">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIST</TD>
+<td><b>m32int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVNBE</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>....z...</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - below or equal (CF=0 and ZF=0)</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_3">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FISTP</TD>
+<td><b>m32int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Integer and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCMOVNU</TD>
+<td><b>ST</b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>......p.</TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>FP Conditional Move - not unordered (PF=0)</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_4">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E0</td>
+<TD CLASS="highlight">4</TD>
+<TD>01+</TD>
+<TD>D<A HREF="#gen_note_FNENI_DBE0_FNDISI_DBE1"><SUP>6</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNENI<i> nop</i>
+</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Treated as Integer NOP</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E1</td>
+<TD CLASS="highlight">4</TD>
+<TD>01+</TD>
+<TD>D<A HREF="#gen_note_FNENI_DBE0_FNDISI_DBE1"><SUP>6</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNDISI<i> nop</i>
+</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Treated as Integer NOP</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E2</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNCLEX</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Clear Exceptions</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E2</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCLEX</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Clear Exceptions</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E3</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNINIT</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<TD>0000</TD>
+<td>Initialize Floating-Point Unit</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E3</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FINIT</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<TD>0000</TD>
+<td>Initialize Floating-Point Unit</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td>E4</td>
+<TD CLASS="highlight">4</TD>
+<TD>03+</TD>
+<TD>D<A HREF="#gen_note_FNSETPM_DBE4"><SUP>7</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNSETPM<i> nop</i>
+</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Treated as Integer NOP</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_5">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLD</TD>
+<td><b><i>ST</i></b></td>
+<td>m80real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Floating Point Value</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FUCOMI</TD>
+<td>ST</td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o...z.pc .1..</TD>
+<TD>o...z.pc .1..</TD>
+<TD></TD>
+<TD>o.......</TD>
+<td>Unordered Compare Floating Point Values and Set EFLAGS</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_6">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCOMI</TD>
+<td>ST</td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o...z.pc .1..</TD>
+<TD>o...z.pc .1..</TD>
+<TD></TD>
+<TD>o.......</TD>
+<td>Compare Floating Point Values and Set EFLAGS</td>
+</TR></TBODY>
+<TBODY><TR id="xDB_7">
+<TD></TD>
+<TD></TD>
+<TD>DB</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSTP</TD>
+<td><b>m80real</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY id="xDC"><TR id="xDC_0">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FADD</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FADD</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_1">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FMUL</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Multiply</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FMUL</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Multiply</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_2">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FCOM</TD>
+<td><i>ST</i></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Real</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD><i>FCOM2</i></TD>
+<td><i>ST</i></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Real</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_3">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FCOMP</TD>
+<td><i>ST</i></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Real and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD><i>FCOMP3</i></TD>
+<td><i>ST</i></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Real and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_4">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSUB</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSUBR</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_5">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSUBR</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Subtract</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSUB</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_6">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FDIV</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Divide</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FDIVR</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Divide</td>
+</TR></TBODY>
+<TBODY><TR id="xDC_7">
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FDIVR</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Divide</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DC</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FDIV</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Divide and Pop</td>
+</TR></TBODY>
+<TBODY id="xDD"><TR id="xDD_0">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FLD</TD>
+<td><b><i>ST</i></b></td>
+<td>m64real</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Floating Point Value</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FFREE</TD>
+<td>STi</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Free Floating-Point Register</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_1">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>P4++</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FISTTP</TD>
+<td><b>m64int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1">sse3</td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD>.0..</TD>
+<td>Store Integer with Truncation and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD><i>FXCH4</i></TD>
+<td><b><i>ST</i></b></td>
+<td><b>STi</b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Exchange Register Contents</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_2">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FST</TD>
+<td><b>m64real</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FST</TD>
+<td><b><i>ST</i></b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_3">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSTP</TD>
+<td><b>m64real</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSTP</TD>
+<td><b><i>ST</i></b></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_4">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FRSTOR</TD>
+<td><b><i>ST</i></b></td>
+<td><b><i>ST1</i></b></td>
+<td><b><i>ST2</i></b></td>
+<td><span title="dst: ST dst: ST1 dst: ST2 dst: ST3 dst: ST4 dst: ST5 dst: ST6 dst: ST7 src: Mst ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Restore x87 FPU State</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FUCOM</TD>
+<td><i>ST</i></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Unordered Compare Floating Point Values</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td>E1</td>
+<TD CLASS="highlight">4</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FUCOM</TD>
+<td><i>ST</i></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Unordered Compare Floating Point Values</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_5">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FUCOMP</TD>
+<td><i>ST</i></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Unordered Compare Floating Point Values and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td>E9</td>
+<TD CLASS="highlight">5</TD>
+<TD>03+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FUCOMP</TD>
+<td><i>ST</i></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Unordered Compare Floating Point Values and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_6">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNSAVE</TD>
+<td><b>m94/108</b></td>
+<td><i>ST</i></td>
+<td><i>ST1</i></td>
+<td><span title="dst: Mst src: ST src: ST1 src: ST2 src: ST3 src: ST4 src: ST5 src: ST6 src: ST7 ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0000</TD>
+<td>Store x87 FPU State</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSAVE</TD>
+<td><b>m94/108</b></td>
+<td><i>ST</i></td>
+<td><i>ST1</i></td>
+<td><span title="dst: Mst src: ST src: ST1 src: ST2 src: ST3 src: ST4 src: ST5 src: ST6 src: ST7 ">...</span></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0000</TD>
+<td>Store x87 FPU State</td>
+</TR></TBODY>
+<TBODY><TR id="xDD_7">
+<TD></TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNSTSW</TD>
+<td><b>m16</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Status Word</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>DD</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSTSW</TD>
+<td><b>m16</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Status Word</td>
+</TR></TBODY>
+<TBODY id="xDE"><TR id="xDE_0">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIADD</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Add</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FADDP</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Add and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>C1</td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FADDP</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Add and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_1">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIMUL</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Multiply</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FMULP</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Multiply and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>C9</td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FMULP</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Multiply and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_2">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FICOM</TD>
+<td><i>ST</i></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD><i>FCOMP5</i></TD>
+<td><i>ST</i></td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Real and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_3">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FICOMP</TD>
+<td><i>ST</i></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Integer and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>D9</td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>P</TD>
+<TD>FCOMPP</TD>
+<td><i>ST</i></td>
+<td><i>ST1</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>0123</TD>
+<TD></TD>
+<TD></TD>
+<td>Compare Real and Pop Twice</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_4">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FISUB</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Subtract</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSUBRP</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Subtract and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>E1</td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSUBRP</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Subtract and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_5">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FISUBR</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Subtract</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSUBP</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Subtract and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>E9</td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FSUBP</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Subtract and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_6">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIDIV</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Divide</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FDIVRP</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Divide and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>F1</td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FDIVRP</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Divide and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDE_7">
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIDIVR</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Reverse Divide</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FDIVP</TD>
+<td><b>STi</b></td>
+<td>ST</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Divide and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DE</TD>
+<td>F9</td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FDIVP</TD>
+<td><b><i>ST1</i></b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Divide and Pop</td>
+</TR></TBODY>
+<TBODY id="xDF"><TR id="xDF_0">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FILD</TD>
+<td><b><i>ST</i></b></td>
+<td>m16int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD>D<A HREF="#gen_note_FFREEP_DF_1"><SUP>8</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD><i>FFREEP</i></TD>
+<td>STi</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Free Floating-Point Register and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_1">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>P4++</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FISTTP</TD>
+<td><b>m16int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1">sse3</td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD>.0..</TD>
+<td>Store Integer with Truncation and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD><i>FXCH7</i></TD>
+<td><b><i>ST</i></b></td>
+<td><b>STi</b></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Exchange Register Contents</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_2">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FIST</TD>
+<td><b>m16int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD><i>FSTP8</i></TD>
+<td><b>STi</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_3">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FISTP</TD>
+<td><b>m16int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Integer and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD>03+</TD>
+<TD>U<A HREF="#gen_note_x87_fpu_undoc_aliases"><SUP>9</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD><i>FSTP9</i></TD>
+<td><b>STi</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Floating Point Value and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_4">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FBLD</TD>
+<td><b><i>ST</i></b></td>
+<td>m80dec</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Binary Coded Decimal</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td>E0</td>
+<TD CLASS="highlight">4</TD>
+<TD>02+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FNSTSW</TD>
+<td><b>AX</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Status Word</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD>9B</TD>
+<TD></TD>
+<TD>DF</TD>
+<td>E0</td>
+<TD CLASS="highlight">4</TD>
+<TD>02+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>FSTSW</TD>
+<td><b>AX</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<TD>0123</TD>
+<TD></TD>
+<td>Store x87 FPU Status Word</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_5">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>s</TD>
+<TD>FILD</TD>
+<td><b><i>ST</i></b></td>
+<td>m64int</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Load Integer</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FUCOMIP</TD>
+<td>ST</td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o...z.pc .1..</TD>
+<TD>o...z.pc .1..</TD>
+<TD></TD>
+<TD>o.......</TD>
+<td>Unordered Compare Floating Point Values and Set EFLAGS and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_6">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FBSTP</TD>
+<td><b>m80dec</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store BCD Integer and Pop</td>
+</TR></TBODY>
+<TBODY><TR>
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD>PP+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FCOMIP</TD>
+<td>ST</td>
+<td>STi</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o...z.pc .1..</TD>
+<TD>o...z.pc .1..</TD>
+<TD></TD>
+<TD>o.......</TD>
+<td>Compare Floating Point Values and Set EFLAGS and Pop</td>
+</TR></TBODY>
+<TBODY><TR id="xDF_7">
+<TD></TD>
+<TD></TD>
+<TD>DF</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>p</TD>
+<TD>FISTP</TD>
+<td><b>m64int</b></td>
+<td><i>ST</i></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>0123</TD>
+<TD>.1..</TD>
+<TD>0.23</TD>
+<TD></TD>
+<td>Store Integer and Pop</td>
+</TR></TBODY>
+<TBODY id="xE4"><TR>
+<TD></TD>
+<TD></TD>
+<TD>E4</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>IN</TD>
+<td><b>AL</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Input from Port</td>
+</TR></TBODY>
+<TBODY id="xE5"><TR>
+<TD></TD>
+<TD></TD>
+<TD>E5</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>IN</TD>
+<td><b>eAX</b></td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Input from Port</td>
+</TR></TBODY>
+<TBODY id="xE6"><TR>
+<TD></TD>
+<TD></TD>
+<TD>E6</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>OUT</TD>
+<td><b>imm8</b></td>
+<td>AL</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Output to Port</td>
+</TR></TBODY>
+<TBODY id="xE7"><TR>
+<TD></TD>
+<TD></TD>
+<TD>E7</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>OUT</TD>
+<td><b>imm8</b></td>
+<td>eAX</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Output to Port</td>
+</TR></TBODY>
+<TBODY id="xE8"><TR>
+<TD></TD>
+<TD></TD>
+<TD>E8</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CALL</TD>
+<td>rel16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Call Procedure</td>
+</TR></TBODY>
+<TBODY id="xE9"><TR>
+<TD></TD>
+<TD></TD>
+<TD>E9</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>JMP</TD>
+<td>rel16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Jump</td>
+</TR></TBODY>
+<TBODY id="xEA"><TR>
+<TD></TD>
+<TD></TD>
+<TD>EA</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>JMPF</TD>
+<td>ptr16:16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Jump</td>
+</TR></TBODY>
+<TBODY id="xEB"><TR>
+<TD></TD>
+<TD></TD>
+<TD>EB</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>JMP</TD>
+<td>rel8</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Jump</td>
+</TR></TBODY>
+<TBODY id="xEC"><TR>
+<TD></TD>
+<TD></TD>
+<TD>EC</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>IN</TD>
+<td><b>AL</b></td>
+<td>DX</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Input from Port</td>
+</TR></TBODY>
+<TBODY id="xED"><TR>
+<TD></TD>
+<TD></TD>
+<TD>ED</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>IN</TD>
+<td><b>eAX</b></td>
+<td>DX</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Input from Port</td>
+</TR></TBODY>
+<TBODY id="xEE"><TR>
+<TD></TD>
+<TD></TD>
+<TD>EE</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>OUT</TD>
+<td><b>DX</b></td>
+<td>AL</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Output to Port</td>
+</TR></TBODY>
+<TBODY id="xEF"><TR>
+<TD></TD>
+<TD></TD>
+<TD>EF</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>OUT</TD>
+<td><b>DX</b></td>
+<td>eAX</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Output to Port</td>
+</TR></TBODY>
+<TBODY id="xF0"><TR>
+<TD CLASS="highlight">F0</TD>
+<TD></TD>
+<TD></TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>LOCK</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Assert LOCK# Signal Prefix</td>
+</TR></TBODY>
+<TD CLASS="highlight">F3</TD>
+<TD></TD>
+<TD></TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD>D<A HREF="#gen_note_REP_F2_F3"><SUP>11</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>REP</TD>
+<td><b><i>eCX</i></b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Repeat String Operation Prefix</td>
+</TR></TBODY>
+<TBODY id="xF4"><TR>
+<TD></TD>
+<TD></TD>
+<TD>F4</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>0</TD>
+<TD></TD>
+<TD>HLT</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Halt</td>
+</TR></TBODY>
+<TBODY id="xF5"><TR>
+<TD></TD>
+<TD></TD>
+<TD>F5</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CMC</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD>.......c</TD>
+<TD>.......c</TD>
+<TD>.......c</TD>
+<TD></TD>
+<TD></TD>
+<td>Complement Carry Flag</td>
+</TR></TBODY>
+<TBODY id="xF6"><TR id="xF6_0">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>TEST</TD>
+<td>r/m8</td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Compare</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_1">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD>U<A HREF="#gen_note_TEST_F6_1_F7_1"><SUP>12</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>TEST</TD>
+<td>r/m8</td>
+<td>imm8</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Compare</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_2">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>NOT</TD>
+<td><b>r/m8</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>One's Complement Negation</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_3">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>NEG</TD>
+<td><b>r/m8</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Two's Complement Negation</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_4">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MUL</TD>
+<td><b><i>AX</i></b></td>
+<td><i>AL</i></td>
+<td>r/m8</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o......c</TD>
+<TD>...szap.</TD>
+<TD></TD>
+<td>Unsigned Multiply</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_5">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>IMUL</TD>
+<td><b><i>AX</i></b></td>
+<td><i>AL</i></td>
+<td>r/m8</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o......c</TD>
+<TD>...szap.</TD>
+<TD></TD>
+<td>Signed Multiply</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_6">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>DIV</TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td><i>AX</i></td>
+<td>r/m8</td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<td>Unsigned Divide</td>
+</TR></TBODY>
+<TBODY><TR id="xF6_7">
+<TD></TD>
+<TD></TD>
+<TD>F6</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>IDIV</TD>
+<td><b><i>AL</i></b></td>
+<td><b><i>AH</i></b></td>
+<td><i>AX</i></td>
+<td>r/m8</td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<td>Signed Divide</td>
+</TR></TBODY>
+<TBODY id="xF7"><TR id="xF7_0">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>TEST</TD>
+<td>r/m16/32</td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Compare</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_1">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD>U<A HREF="#gen_note_TEST_F6_1_F7_1"><SUP>12</SUP></A>
+</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>TEST</TD>
+<td>r/m16/32</td>
+<td>imm16/32</td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..sz.pc</TD>
+<TD>.....a..</TD>
+<TD>o......c</TD>
+<td>Logical Compare</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_2">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>NOT</TD>
+<td><b>r/m16/32</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>One's Complement Negation</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_3">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>NEG</TD>
+<td><b>r/m16/32</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD></TD>
+<td>Two's Complement Negation</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_4">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>MUL</TD>
+<td><b><i>eDX</i></b></td>
+<td><b><i>eAX</i></b></td>
+<td>r/m16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o......c</TD>
+<TD>...szap.</TD>
+<TD></TD>
+<td>Unsigned Multiply</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_5">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>IMUL</TD>
+<td><b><i>eDX</i></b></td>
+<td><b><i>eAX</i></b></td>
+<td>r/m16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD>o......c</TD>
+<TD>...szap.</TD>
+<TD></TD>
+<td>Signed Multiply</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_6">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>DIV</TD>
+<td><b><i>eDX</i></b></td>
+<td><b><i>eAX</i></b></td>
+<td>r/m16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<td>Unsigned Divide</td>
+</TR></TBODY>
+<TBODY><TR id="xF7_7">
+<TD></TD>
+<TD></TD>
+<TD>F7</TD>
+<td></td>
+<TD CLASS="highlight">7</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>IDIV</TD>
+<td><b><i>eDX</i></b></td>
+<td><b><i>eAX</i></b></td>
+<td>r/m16/32</td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<TD>o..szapc</TD>
+<TD></TD>
+<td>Signed Divide</td>
+</TR></TBODY>
+<TBODY id="xF8"><TR>
+<TD></TD>
+<TD></TD>
+<TD>F8</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CLC</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>.......c</TD>
+<TD>.......c</TD>
+<TD></TD>
+<TD>.......c</TD>
+<td>Clear Carry Flag</td>
+</TR></TBODY>
+<TBODY id="xF9"><TR>
+<TD></TD>
+<TD></TD>
+<TD>F9</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>STC</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>.......c</TD>
+<TD>.......c</TD>
+<TD></TD>
+<TD>.......C</TD>
+<td>Set Carry Flag</td>
+</TR></TBODY>
+<TBODY id="xFA"><TR>
+<TD></TD>
+<TD></TD>
+<TD>FA</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>CLI</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>..i.....</TD>
+<TD>..i.....</TD>
+<TD></TD>
+<TD>..i.....</TD>
+<td>Clear Interrupt Flag</td>
+</TR></TBODY>
+<TBODY id="xFB"><TR>
+<TD></TD>
+<TD></TD>
+<TD>FB</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>f<A HREF="#rflags_iopl"><SUP>1</SUP></A>
+</TD>
+<TD></TD>
+<TD>STI</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>..i.....</TD>
+<TD>..i.....</TD>
+<TD></TD>
+<TD>..I.....</TD>
+<td>Set Interrupt Flag</td>
+</TR></TBODY>
+<TBODY id="xFC"><TR>
+<TD></TD>
+<TD></TD>
+<TD>FC</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CLD</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>.d......</TD>
+<TD>.d......</TD>
+<TD></TD>
+<TD>.d......</TD>
+<td>Clear Direction Flag</td>
+</TR></TBODY>
+<TBODY id="xFD"><TR>
+<TD></TD>
+<TD></TD>
+<TD>FD</TD>
+<td></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>STD</TD>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>.d......</TD>
+<TD>.d......</TD>
+<TD></TD>
+<TD>.D......</TD>
+<td>Set Direction Flag</td>
+</TR></TBODY>
+<TBODY id="xFE"><TR id="xFE_0">
+<TD></TD>
+<TD></TD>
+<TD>FE</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>INC</TD>
+<td><b>r/m8</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szap.</TD>
+<TD>o..szap.</TD>
+<TD></TD>
+<TD></TD>
+<td>Increment by 1</td>
+</TR></TBODY>
+<TBODY><TR id="xFE_1">
+<TD></TD>
+<TD></TD>
+<TD>FE</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>DEC</TD>
+<td><b>r/m8</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szap.</TD>
+<TD>o..szap.</TD>
+<TD></TD>
+<TD></TD>
+<td>Decrement by 1</td>
+</TR></TBODY>
+<TBODY id="xFF"><TR id="xFF_0">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">0</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>INC</TD>
+<td><b>r/m16/32</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szap.</TD>
+<TD>o..szap.</TD>
+<TD></TD>
+<TD></TD>
+<td>Increment by 1</td>
+</TR></TBODY>
+<TBODY><TR id="xFF_1">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">1</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>L</TD>
+<TD>DEC</TD>
+<td><b>r/m16/32</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD>o..szap.</TD>
+<TD>o..szap.</TD>
+<TD></TD>
+<TD></TD>
+<td>Decrement by 1</td>
+</TR></TBODY>
+<TBODY><TR id="xFF_2">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">2</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CALL</TD>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Call Procedure</td>
+</TR></TBODY>
+<TBODY><TR id="xFF_3">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">3</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>CALLF</TD>
+<td>m16:16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Call Procedure</td>
+</TR></TBODY>
+<TBODY><TR id="xFF_4">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">4</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>JMP</TD>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Jump</td>
+</TR></TBODY>
+<TBODY><TR id="xFF_5">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">5</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>JMPF</TD>
+<td>m16:16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Jump</td>
+</TR></TBODY>
+<TBODY><TR id="xFF_6">
+<TD></TD>
+<TD></TD>
+<TD>FF</TD>
+<td></td>
+<TD CLASS="highlight">6</TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD>PUSH</TD>
+<td>r/m16/32</td>
+<td></td>
+<td></td>
+<td></td>
+<td rowspan="1"></td>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<TD></TD>
+<td>Push Word, Doubleword or Quadword Onto the Stack</td>
+</TR></TBODY>
+</table>
+
+<div class="breakbefore print_only"><h3>Your Notes:</h3></div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script type="text/javascript">
+      _uacct = "UA-1649193-2";
+      urchinTracker();
+      </script>
+</body>
+</html>

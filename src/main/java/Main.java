@@ -19,18 +19,42 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Map<String, String[]> map = constructHashMap();
+        //Map<String, String[]> map = constructHashMap();
+        Map<String, String[]> map = constructHashMapCoder32();
 
         //System.out.println(Arrays.asList(map));
 
         try {
             String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
             //System.out.println(x);
-            doDisassembly(x, map);
+            //doDisassembly(x, map);
+
+            int pc = 0;
+            while (pc < x.length()) {
+                //pc += disassemble(x, pc, map);
+            }
 
         } catch (Exception e){
 
         }
+    }
+
+    private static int disassemble(String x, int pc, Map<String, String[]> map) {
+        int numChars = 1;
+        String opcode = x.substring(pc, pc+2);
+        String opcodeName = map.get(opcode)[0];
+        String opcodeArgs = map.get(opcode)[1];
+
+
+        System.out.println("value from file is " + opcode);
+        System.out.println("name of opcode is " + opcodeName);
+        System.out.println("args of opcode is " + opcodeArgs);
+        System.out.println("number of args is " + getNumberOfArgumentsInOpcode(opcodeArgs));
+        System.out.println("number of bytes is " + getNumberOfBytesForOpcode(opcode));
+
+        //To print: opcode name, args in reverse order, then
+
+        return getNumberOfBytesForOpcode(opcode) * 2;
     }
 
     private static void doDisassembly(String binaryCode, Map<String, String[]> map) {
@@ -39,6 +63,7 @@ public class Main {
         for (int i = 0; i < binaryCode.length(); i+=2) {
             String opcodeFromBinaryFile = binaryCode.substring(i, i+2);
             System.out.println("The opcode for 0x" + opcodeFromBinaryFile + " = " + Arrays.toString((String[])map.get(opcodeFromBinaryFile)));
+
         }
 
     }
@@ -97,10 +122,6 @@ public class Main {
                     String opCodeNameText = opCodeName.text();
                     String opCodeArgs = cols.get(j).ownText();
 
-                    //System.out.println("opCode: " + opCodetext);
-                    //System.out.println("opCodeNameText: " + opCodeNameText);
-                    //System.out.println("args: " + opCodeArgs + "\n");
-
                     String stringArray[] = new String[2];
                     stringArray[0] = opCodeNameText;
                     stringArray[1] = opCodeArgs;
@@ -144,6 +165,48 @@ public class Main {
             return 1;
         }
         return 2;
+
+    }
+
+
+    //TODO - better function name, create helper functions and docblocks
+    private static Map<String, String[]> constructHashMapCoder32() {
+
+        //TODO - better variable names
+        Map map = new HashMap<String, String>();
+
+
+        try {
+            ClassLoader classLoader = Main.class.getClassLoader();
+            File input = new File(classLoader.getResource("coder32_opcodes.html").getFile());
+            System.out.println("got table");
+
+            Document doc = Jsoup.parse(input, "UTF-8", "http://sparksandflames.com");
+
+            Element table = doc.select("table").get(0); //select the first table.
+            Elements rows = table.select("tr");
+
+            Elements headers = rows.first().select("th");
+
+
+            for (int i = 0; i < rows.size(); i++) {
+                Element row = rows.get(i);
+                Elements cols = row.select("td");
+                System.out.println(row.text());
+                System.out.println("and value for opcode is " + rows.get(i).child(2));
+                System.out.println("and name for opcode is " + rows.get(i).child(10));
+
+
+                for (int j = 0; j < cols.size(); j++) {
+                    System.out.println("the name of the column is " + headers.get(j).attr("title"));
+                }
+            }
+            //TODO - do some better exception handling here
+        } catch (Exception e) {
+
+        }
+
+        return map;
 
     }
 
