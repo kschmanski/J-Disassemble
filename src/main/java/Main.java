@@ -5,10 +5,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
+import java.nio.file.Path;
 
 class DisassembledElement {
     public String valueToPrint;
@@ -43,21 +46,57 @@ public class Main extends Helper{
         try {
             String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
 
-            doDisassembly(x, map);
-
+            for (int i = 0; i < x.length() - 1; i+=2) {
+                //System.out.println(x.substring(i, i+2));
+            }
+            //doDisassembly(x, map);
+            readBytes(x);
 
         } catch (Exception e){
 
         }
     }
 
+    private static void readBytes(String x) {
+        try {
+            File file = new File("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+
+            InputStream insputStream = new FileInputStream(file);
+            long length = file.length();
+
+            byte[] bytes = new byte[(int) length];
+
+            insputStream.read(bytes);
+            insputStream.close();
+
+            //int numBytesToPrint = 100;
+            int numBytesToPrint = bytes.length;
+
+            for (int i = 0; i < numBytesToPrint-3; i+=4) {
+                String bytesToPrint = String.format("%02x", bytes[i]) + " " +
+                        String.format("%02x", bytes[i+1]) + " " +
+                String.format("%02x", bytes[i+2]) + " " +
+                String.format("%02x", bytes[i+3]);
+                System.out.println(bytesToPrint);
+            }
+            String s = new String(bytes);
+            //Print the byte data into string format
+            for (int i = 0; i < s.length(); i++ ) {
+                //System.out.print(String.format("%c", s.charAt(i)));
+            }
+            //System.out.println(new String(new byte[]{ (byte)0x63 }, "US-ASCII"));
+
+        } catch (Exception e) {
+
+        }
+    }
+
     private static void doDisassembly(String x, Map<String, String[]> map) {
         int c = 0;
-        DisassembledElement de = new DisassembledElement();
+        DisassembledElement de;
 
         try {
             FileWriter myFile = new FileWriter("disassembly.txt", false);
-            //myFile.write("H2!");
 
             int pc = 0;
             while (pc < x.length()) {
@@ -73,7 +112,6 @@ public class Main extends Helper{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
 
         System.out.println("number of bytes processed: " + c);
