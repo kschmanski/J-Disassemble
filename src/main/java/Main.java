@@ -1,5 +1,6 @@
 import java.io.*;
 
+import net.fornwall.jelf.ElfFile;
 import org.jsoup.Jsoup;
 
 import org.jsoup.nodes.Document;
@@ -49,12 +50,13 @@ public class Main extends Helper{
             for (int i = 0; i < x.length() - 1; i+=2) {
                 //System.out.println(x.substring(i, i+2));
             }
-            //doDisassembly(x, map);
+            doDisassembly(x, map);
             readBytes(x);
 
         } catch (Exception e){
 
         }
+
     }
 
     private static void readBytes(String x) {
@@ -70,9 +72,10 @@ public class Main extends Helper{
             insputStream.close();
 
             //int numBytesToPrint = 100;
-            int numBytesToPrint = bytes.length;
+            int start = 15776;
+            int numBytesToPrint = bytes.length - start;
 
-            for (int i = 0; i < numBytesToPrint-3; i+=4) {
+            for (int i = start; i < numBytesToPrint-3; i+=4) {
                 String bytesToPrint = String.format("%02x", bytes[i]) + " " +
                         String.format("%02x", bytes[i+1]) + " " +
                 String.format("%02x", bytes[i+2]) + " " +
@@ -98,7 +101,8 @@ public class Main extends Helper{
         try {
             FileWriter myFile = new FileWriter("disassembly.txt", false);
 
-            int pc = 0;
+            //int pc = 0;
+            int pc = 15776;
             while (pc < x.length()) {
                 de = disassemble(x, pc, map);
                 pc += de.numberOfBytes;
