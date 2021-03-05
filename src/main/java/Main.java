@@ -19,21 +19,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //Map<String, String[]> map = constructHashMap();
         Map<String, String[]> map = constructHashMapCoder32();
 
-        //System.out.println(Arrays.asList(map));
-        printHashMap(map);
+        //printHashMap(map);
 
         try {
             String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
             //System.out.println(x);
-            //doDisassembly(x, map);
 
             int pc = 0;
+            int c = 0;
             while (pc < x.length()) {
-                //pc += disassemble(x, pc, map);
+                pc += disassemble(x, pc, map);
+                c++;
             }
+            System.out.println("number of bytes processed: " + c);
 
         } catch (Exception e){
 
@@ -41,32 +41,20 @@ public class Main {
     }
 
     private static int disassemble(String x, int pc, Map<String, String[]> map) {
-        int numChars = 1;
+        // make sure we have two bytes to get
+        if (pc >= x.length() - 1) {
+            return 1;
+        }
+
+        String memoryAddress = String.format("%08x", pc);
         String opcode = x.substring(pc, pc+2);
         String opcodeName = map.get(opcode)[0];
         String opcodeArgs = map.get(opcode)[1];
 
-
-        System.out.println("value from file is " + opcode);
-        System.out.println("name of opcode is " + opcodeName);
-        System.out.println("args of opcode is " + opcodeArgs);
-        System.out.println("number of args is " + getNumberOfArgumentsInOpcode(opcodeArgs));
-        System.out.println("number of bytes is " + getNumberOfBytesForOpcode(opcode));
-
-        //To print: opcode name, args in reverse order, then
+        System.out.println("Opcode: " + opcode);
+        System.out.println(memoryAddress + "      " + opcodeName + "   " + opcodeArgs);
 
         return getNumberOfBytesForOpcode(opcode) * 2;
-    }
-
-    private static void doDisassembly(String binaryCode, Map<String, String[]> map) {
-        //System.out.println(binaryCode);
-
-        for (int i = 0; i < binaryCode.length(); i+=2) {
-            String opcodeFromBinaryFile = binaryCode.substring(i, i+2);
-            System.out.println("The opcode for 0x" + opcodeFromBinaryFile + " = " + Arrays.toString((String[])map.get(opcodeFromBinaryFile)));
-
-        }
-
     }
 
     //TODO - rework this function, docblock, change name, variable names
@@ -208,7 +196,7 @@ public class Main {
                 opcodeArgs.append(",");
                 opcodeArgs.append(arg2.trim());
 
-                System.out.println("args is " + opcodeArgs.toString());
+                //System.out.println("args is " + opcodeArgs.toString());
 
 
                 String stringArray[] = new String[2];
@@ -223,6 +211,24 @@ public class Main {
 
         }
 
+        map = fillInMissingValues(map);
+
+        return map;
+
+    }
+
+    private static Map<String, String[]> fillInMissingValues(Map<String, String[]> map) {
+        for (char i = 0; i < 256; i++) {
+            if (map.get(String.format("%02x", (int)i)) != null) {
+                //System.out.println("map already has value " + String.format("%02x", (int)i));
+            } else {
+                String arr[] = new String[2];
+                arr[0] = "NOP";
+                map.put(String.format("%02x", (int)i).toUpperCase(), arr);
+                //System.out.println("put NOP for " + String.format("%02x", (int)i));
+            }
+            //System.out.println(String.format("%04x", (int)i));
+        }
         return map;
 
     }
