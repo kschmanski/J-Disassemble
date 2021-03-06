@@ -1,16 +1,37 @@
 import java.io.*;
 
+import net.fornwall.jelf.ElfFile;
 import org.jsoup.Jsoup;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
+import java.nio.file.Path;
 
-public class Main {
+class DisassembledElement {
+    public String valueToPrint;
+    public int numberOfBytes;
+
+    public DisassembledElement() {
+    }
+
+    public void setValueToPrint(String valueToPrint) {
+        this.valueToPrint = valueToPrint;
+    }
+
+    public void setNumberOfBytes(int numberOfBytes) {
+        this.numberOfBytes = numberOfBytes;
+    }
+
+}
+
+public class Main extends Helper {
 
     // to run:
     // compile in here first
@@ -21,106 +42,211 @@ public class Main {
 
         Map<String, String[]> map = constructHashMap();
 
-        //System.out.println(Arrays.asList(map));
+        //printHashMap(map);
 
         try {
-            String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
-            //System.out.println(x);
-            doDisassembly(x, map);
+            String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+
+            int entryPoint = getEntrypoint("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+
+            System.out.println("entrypoint: " + entryPoint);
+            System.out.println("expected: 15776");
+
+            doDisassembly(x, map, entryPoint);
+            //readBytes(x);
 
         } catch (Exception e){
+            e.printStackTrace();
 
-        }
-    }
-
-    private static void doDisassembly(String binaryCode, Map<String, String[]> map) {
-        //System.out.println(binaryCode);
-
-        for (int i = 0; i < binaryCode.length(); i+=2) {
-            String opcodeFromBinaryFile = binaryCode.substring(i, i+2);
-            System.out.println("The opcode for 0x" + opcodeFromBinaryFile + " = " + Arrays.toString((String[])map.get(opcodeFromBinaryFile)));
         }
 
     }
 
-    //TODO - rework this function, docblock, change name, variable names
-    public static String binaryFileToHexString(final String path)
-            throws FileNotFoundException, IOException
-    {
-        final int bufferSize = 512;
-        final byte[] buffer = new byte[bufferSize];
-        final StringBuilder sb = new StringBuilder();
+    /**
+     * Hacky function used to get the entrypoint of a file.
+     * Will probably only work for MacOS files...
+     *
+     * @param x
+     * @return
+     */
+    private static int getEntrypoint(String x) {
+        int entryPoint = 0;
+        ProcessBuilder processBuilder = new ProcessBuilder();
 
-        // open the file
-        FileInputStream stream = new FileInputStream(path);
-        int bytesRead;
+        // -- Linux --
 
-        // read a block
-        while ((bytesRead = stream.read(buffer)) > 0)
-        {
-            // append the block as hex
-            for (int i = 0; i < bytesRead; i++)
-            {
-                sb.append(String.format("%02X", buffer[i]));
-            }
-        }
-        stream.close();
-
-        return sb.toString();
-    }
-
-    //TODO - better function name, create helper functions and docblocks
-    private static Map<String, String[]> constructHashMap() {
-
-        //TODO - better variable names
-        Map map = new HashMap<String, String>();
+        // Run a shell command
+        processBuilder.command("bash", "-c", "otool -l /Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile | fgrep -B1 -A3 LC_MAIN");
 
 
         try {
-            ClassLoader classLoader = Main.class.getClassLoader();
-            File input = new File(classLoader.getResource("opcodes.html").getFile());
-            Document doc = Jsoup.parse(input, "UTF-8", "http://sparksandflames.com");
 
-            Element table = doc.select("table").get(0); //select the first table.
-            Elements rows = table.select("tr");
+            Process process = processBuilder.start();
 
-            //TODO - refactor both of these loops to be a foreach (look up the Java syntax for it)
-            for (int i = 0; i < rows.size(); i++) {
-                Element row = rows.get(i);
-                Elements cols = row.select("td");
+            StringBuilder output = new StringBuilder();
+            Map<String, String> map = new HashMap<String, String>();
 
-                for (int j = 0; j < cols.size(); j++) {
-                    Elements opCode = cols.get(j).select("i");
-                    Elements opCodeName = cols.get(j).select("b");
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
 
-                    String opCodetext = opCode.text();
-                    String opCodeNameText = opCodeName.text();
-                    String opCodeArgs = cols.get(j).ownText();
-
-                    //System.out.println("opCode: " + opCodetext);
-                    //System.out.println("opCodeNameText: " + opCodeNameText);
-                    //System.out.println("args: " + opCodeArgs + "\n");
-
-                    String stringArray[] = new String[2];
-                    stringArray[0] = opCodeNameText;
-                    stringArray[1] = opCodeArgs;
-
-                    map.put(opCodetext, stringArray);
-                    System.out.println(opCodetext);
-                    System.out.println(Arrays.toString((String[])map.get(opCodetext)));
-                    System.out.println(getNumberOfArgumentsInOpcode(opCodeArgs));
-                    System.out.println("number of bytes is " + getNumberOfBytesForOpcode(opCodetext));
-                    System.out.println("\n\n");
-                }
-
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line + "\n");
+                String[] t = line.trim().split(" ");
+                map.put(t[0], t[1]);
             }
-            //TODO - do some better exception handling here
+
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                //System.out.println("Success!");
+                //System.out.println(output);
+                for (String key : map.keySet()) {
+                    if (key.equals("entryoff")) {
+                        entryPoint = Integer.parseInt(map.get(key));
+                    }
+                }
+            } else {
+                //abnormal...
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return entryPoint;
+    }
+
+    private static void readBytes(String x) {
+        try {
+            File file = new File("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+
+            InputStream insputStream = new FileInputStream(file);
+            long length = file.length();
+
+            byte[] bytes = new byte[(int) length];
+
+            insputStream.read(bytes);
+            insputStream.close();
+
+            //int numBytesToPrint = 100;
+            int start = 15776;
+            int numBytesToPrint = bytes.length - start;
+
+            for (int i = start; i < numBytesToPrint-3; i+=4) {
+                String bytesToPrint = String.format("%02x", bytes[i]) + " " +
+                        String.format("%02x", bytes[i+1]) + " " +
+                String.format("%02x", bytes[i+2]) + " " +
+                String.format("%02x", bytes[i+3]);
+                System.out.println(bytesToPrint);
+            }
+            String s = new String(bytes);
+            //Print the byte data into string format
+            for (int i = 0; i < s.length(); i++ ) {
+                //System.out.print(String.format("%c", s.charAt(i)));
+            }
+            //System.out.println(new String(new byte[]{ (byte)0x63 }, "US-ASCII"));
+
         } catch (Exception e) {
 
         }
+    }
 
-        return map;
+    private static void doDisassembly(String x, Map<String, String[]> map, int entryPoint) {
+        int c = 0;
+        DisassembledElement de;
+        File file = new File("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
 
+        try {
+            FileWriter myFile = new FileWriter("disassembly.txt", false);
+            InputStream insputStream = new FileInputStream(file);
+            long length = file.length();
+
+            byte[] bytes = new byte[(int) length];
+
+            insputStream.read(bytes);
+            insputStream.close();
+
+
+
+            //int pc = 0;
+            int pc = entryPoint;
+            int numBytesToPrint = bytes.length - pc;
+
+            //while (pc < 15800) {
+            while (pc < numBytesToPrint - 3) {
+                de = disassemble(x, pc, map, bytes);
+                pc += de.numberOfBytes;
+                myFile.write(de.valueToPrint + "\n");
+                c++;
+            }
+
+            myFile.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("number of bytes processed: " + c);
+    }
+
+    private static DisassembledElement disassemble(String x, int pc, Map<String, String[]> map, byte[] bytes) {
+        // make sure we have two bytes to get
+        DisassembledElement toReturn = new DisassembledElement();
+        if (pc >= bytes.length - 1) {
+            toReturn.setNumberOfBytes(1);
+            return toReturn;
+        } else {
+            String memoryAddress = String.format("%08x", pc);
+            //String opcode = x.substring(pc, pc+2);
+            String opcode = String.format("%02x", bytes[pc]).toUpperCase();
+            System.out.println("opcode is: " + opcode);
+            System.out.println("Name is: " + map.get(opcode)[0]);
+            String opcodeName = map.get(opcode)[0];
+            String opcodeArgs = map.get(opcode)[1];
+            toReturn.setNumberOfBytes(getNumberOfBytesForOpcode(opcode) * 2);
+            toReturn.setValueToPrint(memoryAddress + "      " + opcodeName + "   " + opcodeArgs);
+        }
+
+        return toReturn;
+    }
+
+    private static DisassembledElement d2(String x, int pc, Map<String, String[]> map) {
+        File file = new File("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+        DisassembledElement toReturn = new DisassembledElement();
+
+        try {
+        InputStream insputStream = new FileInputStream(file);
+        long length = file.length();
+
+        byte[] bytes = new byte[(int) length];
+
+        insputStream.read(bytes);
+        insputStream.close();
+
+        //int numBytesToPrint = 100;
+        int start = 15776;
+        int numBytesToPrint = bytes.length - start;
+
+        for (int i = start; i < numBytesToPrint-3; i+=4) {
+            String bytesToPrint = String.format("%02x", bytes[i]) + " " +
+                    String.format("%02x", bytes[i+1]) + " " +
+                    String.format("%02x", bytes[i+2]) + " " +
+                    String.format("%02x", bytes[i+3]);
+            System.out.println(bytesToPrint);
+        }
+        String s = new String(bytes);
+        //Print the byte data into string format
+        for (int i = 0; i < s.length(); i++ ) {
+            //System.out.print(String.format("%c", s.charAt(i)));
+        }
+        //System.out.println(new String(new byte[]{ (byte)0x63 }, "US-ASCII"));
+
+    } catch (Exception e) {
+
+    }
+        return toReturn;
     }
 
     private static int getNumberOfArgumentsInOpcode(String opCodeArgs) {
@@ -135,7 +261,6 @@ public class Main {
         }
 
         return 0;
-
     }
 
     private static int getNumberOfBytesForOpcode(String opCode) {
