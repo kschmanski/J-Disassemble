@@ -1,43 +1,13 @@
 import java.io.*;
-
-import net.fornwall.jelf.ElfFile;
-import org.jsoup.Jsoup;
-
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.jsoup.nodes.Element;
-
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Arrays;
-import java.util.List;
-import java.nio.file.Path;
-
-class DisassembledElement {
-    public String valueToPrint;
-    public int numberOfBytes;
-
-    public DisassembledElement() {
-    }
-
-    public void setValueToPrint(String valueToPrint) {
-        this.valueToPrint = valueToPrint;
-    }
-
-    public void setNumberOfBytes(int numberOfBytes) {
-        this.numberOfBytes = numberOfBytes;
-    }
-
-}
 
 public class Disassembler extends Helper {
-
 
     // to run:
     // compile in here first
     // mvn compile
-    // mvn exec:java -Dexec.mainClass=Main
+    // mvn exec:java -Dexec.mainClass=Disassembler
 
     // Binary file to disassemble
     String filepath = "/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile";
@@ -45,7 +15,6 @@ public class Disassembler extends Helper {
     int entryPoint = 0;
 
     public static void main(String[] args) {
-
         Disassembler d = new Disassembler();
         d.map = constructHashMap();
 
