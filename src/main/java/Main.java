@@ -31,7 +31,7 @@ class DisassembledElement {
 
 }
 
-public class Main extends Helper{
+public class Main extends Helper {
 
     // to run:
     // compile in here first
@@ -45,18 +45,75 @@ public class Main extends Helper{
         //printHashMap(map);
 
         try {
-            String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/main");
+            String x = binaryFileToHexString("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
 
-            for (int i = 0; i < x.length() - 1; i+=2) {
-                //System.out.println(x.substring(i, i+2));
-            }
-            doDisassembly(x, map);
-            readBytes(x);
+            int entryPoint = getEntrypoint("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+
+            System.out.println("entrypoint: " + entryPoint);
+            System.out.println("expected: 15776");
+
+            doDisassembly(x, map, entryPoint);
+            //readBytes(x);
 
         } catch (Exception e){
+            e.printStackTrace();
 
         }
 
+    }
+
+    /**
+     * Hacky function used to get the entrypoint of a file.
+     * Will probably only work for MacOS files...
+     *
+     * @param x
+     * @return
+     */
+    private static int getEntrypoint(String x) {
+        int entryPoint = 0;
+        ProcessBuilder processBuilder = new ProcessBuilder();
+
+        // -- Linux --
+
+        // Run a shell command
+        processBuilder.command("bash", "-c", "otool -l /Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile | fgrep -B1 -A3 LC_MAIN");
+
+
+        try {
+
+            Process process = processBuilder.start();
+
+            StringBuilder output = new StringBuilder();
+            Map<String, String> map = new HashMap<String, String>();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line + "\n");
+                String[] t = line.trim().split(" ");
+                map.put(t[0], t[1]);
+            }
+
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                //System.out.println("Success!");
+                //System.out.println(output);
+                for (String key : map.keySet()) {
+                    if (key.equals("entryoff")) {
+                        entryPoint = Integer.parseInt(map.get(key));
+                    }
+                }
+            } else {
+                //abnormal...
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return entryPoint;
     }
 
     private static void readBytes(String x) {
@@ -94,7 +151,7 @@ public class Main extends Helper{
         }
     }
 
-    private static void doDisassembly(String x, Map<String, String[]> map) {
+    private static void doDisassembly(String x, Map<String, String[]> map, int entryPoint) {
         int c = 0;
         DisassembledElement de;
 
@@ -102,7 +159,7 @@ public class Main extends Helper{
             FileWriter myFile = new FileWriter("disassembly.txt", false);
 
             //int pc = 0;
-            int pc = 15776;
+            int pc = entryPoint;
             while (pc < x.length()) {
                 de = disassemble(x, pc, map);
                 pc += de.numberOfBytes;
