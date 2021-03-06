@@ -154,14 +154,27 @@ public class Main extends Helper {
     private static void doDisassembly(String x, Map<String, String[]> map, int entryPoint) {
         int c = 0;
         DisassembledElement de;
+        File file = new File("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
 
         try {
             FileWriter myFile = new FileWriter("disassembly.txt", false);
+            InputStream insputStream = new FileInputStream(file);
+            long length = file.length();
+
+            byte[] bytes = new byte[(int) length];
+
+            insputStream.read(bytes);
+            insputStream.close();
+
+
 
             //int pc = 0;
             int pc = entryPoint;
-            while (pc < x.length()) {
-                de = disassemble(x, pc, map);
+            int numBytesToPrint = bytes.length - pc;
+
+            //while (pc < 15800) {
+            while (pc < numBytesToPrint - 3) {
+                de = disassemble(x, pc, map, bytes);
                 pc += de.numberOfBytes;
                 myFile.write(de.valueToPrint + "\n");
                 c++;
@@ -178,21 +191,61 @@ public class Main extends Helper {
         System.out.println("number of bytes processed: " + c);
     }
 
-    private static DisassembledElement disassemble(String x, int pc, Map<String, String[]> map) {
+    private static DisassembledElement disassemble(String x, int pc, Map<String, String[]> map, byte[] bytes) {
         // make sure we have two bytes to get
         DisassembledElement toReturn = new DisassembledElement();
-        if (pc >= x.length() - 1) {
+        if (pc >= bytes.length - 1) {
             toReturn.setNumberOfBytes(1);
             return toReturn;
         } else {
             String memoryAddress = String.format("%08x", pc);
-            String opcode = x.substring(pc, pc+2);
+            //String opcode = x.substring(pc, pc+2);
+            String opcode = String.format("%02x", bytes[pc]).toUpperCase();
+            System.out.println("opcode is: " + opcode);
+            System.out.println("Name is: " + map.get(opcode)[0]);
             String opcodeName = map.get(opcode)[0];
             String opcodeArgs = map.get(opcode)[1];
             toReturn.setNumberOfBytes(getNumberOfBytesForOpcode(opcode) * 2);
             toReturn.setValueToPrint(memoryAddress + "      " + opcodeName + "   " + opcodeArgs);
         }
 
+        return toReturn;
+    }
+
+    private static DisassembledElement d2(String x, int pc, Map<String, String[]> map) {
+        File file = new File("/Users/kris/Desktop/Personal/DePaul/SE526/disassembler/mybinaryfile");
+        DisassembledElement toReturn = new DisassembledElement();
+
+        try {
+        InputStream insputStream = new FileInputStream(file);
+        long length = file.length();
+
+        byte[] bytes = new byte[(int) length];
+
+        insputStream.read(bytes);
+        insputStream.close();
+
+        //int numBytesToPrint = 100;
+        int start = 15776;
+        int numBytesToPrint = bytes.length - start;
+
+        for (int i = start; i < numBytesToPrint-3; i+=4) {
+            String bytesToPrint = String.format("%02x", bytes[i]) + " " +
+                    String.format("%02x", bytes[i+1]) + " " +
+                    String.format("%02x", bytes[i+2]) + " " +
+                    String.format("%02x", bytes[i+3]);
+            System.out.println(bytesToPrint);
+        }
+        String s = new String(bytes);
+        //Print the byte data into string format
+        for (int i = 0; i < s.length(); i++ ) {
+            //System.out.print(String.format("%c", s.charAt(i)));
+        }
+        //System.out.println(new String(new byte[]{ (byte)0x63 }, "US-ASCII"));
+
+    } catch (Exception e) {
+
+    }
         return toReturn;
     }
 
