@@ -24,7 +24,7 @@ public class Helper {
         try {
             ClassLoader classLoader = Disassembler.class.getClassLoader();
             // Get the HTML file from which to construct the hashmap
-            File input = new File(classLoader.getResource("coder32_opcodes_round2.html").getFile());
+            File input = new File(classLoader.getResource("coder32_opcodes.html").getFile());
 
             Document doc = Jsoup.parse(input, "UTF-8", "http://sparksandflames.com");
             Element table = doc.select("table").get(0);
