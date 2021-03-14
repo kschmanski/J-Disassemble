@@ -5,7 +5,6 @@ import java.util.Map;
 public class Disassembler extends Helper {
 
     // to run:
-    // compile in here first
     // mvn compile
     // mvn exec:java -Dexec.mainClass=Disassembler
 
@@ -22,10 +21,6 @@ public class Disassembler extends Helper {
 
         try {
             d.entryPoint = getEntrypoint(d.filepath);
-
-            System.out.println("entrypoint: " + d.entryPoint);
-            System.out.println("expected: 15776");
-
             doDisassembly(d);
 
         } catch (Exception e){
@@ -86,19 +81,18 @@ public class Disassembler extends Helper {
     }
 
     private static void doDisassembly(Disassembler d) {
-        int c = 0;
         DisassembledElement de;
         File file = new File(d.filepath);
 
         try {
             FileWriter myFile = new FileWriter("disassembly.txt", false);
-            InputStream insputStream = new FileInputStream(file);
+            InputStream inputStream = new FileInputStream(file);
             long length = file.length();
 
             byte[] bytes = new byte[(int) length];
 
-            insputStream.read(bytes);
-            insputStream.close();
+            inputStream.read(bytes);
+            inputStream.close();
 
             int program_counter = d.entryPoint;
             int numBytesToPrint = bytes.length - program_counter;
@@ -107,7 +101,6 @@ public class Disassembler extends Helper {
                 de = disassemble(program_counter, d.map, bytes);
                 program_counter += de.numberOfBytes;
                 myFile.write(de.valueToPrint + "\n");
-                c++;
             }
 
             myFile.close();
@@ -127,10 +120,7 @@ public class Disassembler extends Helper {
             return toReturn;
         } else {
             String memoryAddress = String.format("%08x", pc);
-            //String opcode = x.substring(pc, pc+2);
             String opcode = String.format("%02x", bytes[pc]).toUpperCase();
-            //System.out.println("opcode is: " + opcode);
-            //System.out.println("Name is: " + map.get(opcode)[0]);
             String opcodeName = map.get(opcode)[0];
             String opcodeArgs = map.get(opcode)[1];
             toReturn.setNumberOfBytes(getNumberOfBytesForOpcode(opcode) * 2);
